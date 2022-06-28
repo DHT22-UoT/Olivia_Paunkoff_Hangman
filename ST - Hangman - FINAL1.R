@@ -1,12 +1,12 @@
 # Olivia Paunkoff
 # Special Topics in Biomedical Comm. 
 # Assignment 3 - Hangman 
-
+##Double hash comments will be my code-review comments ~ Papiha 
 library(readr)
 library(stringr)
 
 # Read hangman dictionary file into r
-
+##Set a working directory instead of reading entire file pathway with setwd command 
 hangman_dict <- read.table(file = "/Users/olivia/Desktop/hangman_dict1.txt", header = F)
 hangman_words <- hangman_dict$V1
 
@@ -23,8 +23,9 @@ rand_word3 <- unlist(rand_word3)
 # Inform the user about instructions and the number of wrong guesses/tries allowed
 
 cat("\nWelcome to Hangman! How to play: when prompted, please guess one letter at a time.\n")
-cat("\n If the letter guess is not in the word, you lose a life.You may also guess the full word at anytime for a win!\n")
-cat("\n Quit the game anytime by typing 'quit'. You have 10 guesses. Good luck!\n")
+cat("\n If the letter guess is not in the word, you lose a life.You may also guess the full word at anytime for a win!\n") 
+cat("\n Quit the game anytime by typing 'quit'. You have 10 guesses. Good luck!\n") 
+##Adding the 'quit' end command is a helpful addition!
 
 # Tell the user how many characters in the word
 num_char <- nchar(hangman_words[rand_word])
@@ -38,6 +39,7 @@ for (input_lettr in rand_word3) {
 }
 
 # Function to inform user of their progress on guessing the mystery word
+##Clever use of a function to return the user-progress
 user_progress <- function(progress) {
   cat("\n-> Your progress: ")
   cat(paste(progress, collapse = ' '))
@@ -54,15 +56,21 @@ guessed_letters <- c()
 # this loop will function
 while (lives > 0) {
   
+  ##Would be helpful to see the user-progress here instead of below (commented out the below user_progress)
+  user_progress(progress_word) 
+  
+  
   # Ask user for their guess
   input_lettr <- readline("Please input a letter guess: ") 
   
+
   # Create statement for exiting the game upon user request
   if (input_lettr == "quit") {
     (print("Exiting game now, please come again!"))
     break
   }
   # Create statement for when player guesses correct answer by typing in full word, ends game
+  
   else if (input_lettr == rand_word2) {
     cat("\n WINNER ALERT!!!You guessed correctly!\n")
     cat(paste("The word was:", rand_word2, "\n"))
@@ -73,7 +81,10 @@ while (lives > 0) {
   else if (grepl("^[A-Za-z]+$", input_lettr, perl = T) == F) {
     cat("\n-> Please input letters ONLY!\n")
     # Blocks users from putting in more than one letter at a time that is not "quit" or the mystery word
-  } else if (nchar(input_lettr) > 1) {
+    ##If user guesses incorrectly, additional useful modification would be to inform user that they entered the
+    ##incorrect word instead of returning the "HELLO! Please only guess ONE letter at a time!" message if incorrect
+  ##Following condition worked well for all types of combinations i.e. numbers, alpha-numeric combinations, etc
+    } else if (nchar(input_lettr) > 1) {
     cat("\nHELLO! Please only guess ONE letter at a time!\n\n")
   } else {
     # Statement that checks if the user guessed the letter correctly 
@@ -84,7 +95,12 @@ while (lives > 0) {
       cat("Letters guessed: ")
       cat(paste(guessed_letters, collapse = ', '))
       # Displays user progress and places it in the correct position in the mystery word
-      user_progress(progress_word) 
+      ##Additional functionality can include displaying user progress after both correct and incorrect attempts 
+      ##Noticed that 1 additional attempt was needed to display progress with successful character, would be useful to display in the same round
+
+      ##Commented out the following user_progress, instead moved the object to be shown before the user_input
+      #user_progress(progress_word) 
+      ##Would enable the user_progress to be seen regardless of whether user inputs incorrect/correct characters
       numb_positions <- which(rand_word3 == input_lettr)
       for (position in numb_positions) {
         progress_word[position] <- input_lettr
@@ -99,6 +115,7 @@ while (lives > 0) {
       cat(paste(guessed_letters, collapse = ', '))
     }   
     # Statement for if a user guesses the word correctly with individual letter guesses instead of guessing the whole word in one go
+    ##Great job at implementing the break condition, was necessary to exit game even if user still had more guesses left
     if (paste(progress_word, collapse = '') == rand_word2) {
       cat("\n WOOHOO!! You guessed correctly!\n")
       cat(paste("The word was:", rand_word2, "\n"))
@@ -113,3 +130,5 @@ while (lives > 0) {
     }
   }
 }
+
+##Great job overall, game worked as expected and code was well-documented and understandable with your comments 
